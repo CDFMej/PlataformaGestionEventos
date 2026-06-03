@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Sala 12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/ProyectoReservaciones.styles.css" asp-append-version="true"/>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a22;
+            color: #b5b5be;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .custom-navbar {
+            background-color: #21212b !important;
+            border-bottom: 1px solid #2d2d3d !important;
+            padding: 0.8rem 1.5rem;
+        }
+        .custom-navbar .navbar-brand {
+            font-weight: 600;
+            color: #ffffff !important;
+            letter-spacing: 0.5px;
+        }
+        .custom-navbar .nav-link {
+            color: #7e7e8f !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.2s ease;
+        }
+        .custom-navbar .nav-link:hover, 
+        .custom-navbar .nav-item.active .nav-link {
+            color: #ffffff !important;
+        }
+        .footer {
+            background-color: #1a1a22;
+            border-top: 1px solid #2d2d3d !important;
+            color: #5c5c70 !important;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        .footer a {
+            color: #7e7e8f;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark custom-navbar box-shadow mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sala 12</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Evento" asp-action="Index">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Asistente" asp-action="Index">Asistentes</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Recurso" asp-action="Index">Recursos</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Inscripcion" asp-action="Index">Inscripciones</a></li>
+                </ul>
+                <partial name="_LoginPartial"/>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-4">
+        @RenderBody()
+    </main>
+</div>
+<footer class="footer">
+    <div class="container text-center text-sm-start">
+        &copy; 2026 - ProyectoReservaciones - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

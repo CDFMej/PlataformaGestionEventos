@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ProyectoReservaciones.Models;
+namespace PlataformaGestionEventos.Models;
 
 public class Asistente
 {

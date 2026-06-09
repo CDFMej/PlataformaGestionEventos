@@ -1,0 +1,49 @@
+@model PlataformaGestionEventos.Models.Inscripcion
+@{
+    ViewData["Title"] = "Editar Inscripción";
+}
+<style>
+    .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); max-width: 600px; margin: 0 auto; }
+    .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
+    .custom-hr { border-top: 1px solid #2d2d3d; opacity: 1; margin: 1.5rem 0; }
+    .custom-label { color: #7e7e8f; font-weight: 500; font-size: 0.9rem; margin-bottom: 8px; }
+    .custom-control { background-color: #262633; border: 1px solid #2d2d3d; color: #ffffff; border-radius: 10px; padding: 12px 16px; font-size: 0.95rem; transition: all 0.2s ease; }
+    .custom-control:focus { background-color: #262633; border-color: #ff527b; color: #ffffff; box-shadow: 0 0 0 3px rgba(255, 82, 123, 0.15); }
+    select.custom-control { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%237e7e8f' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px 12px; padding-right: 2.5rem; }
+    select.custom-control option { background-color: #21212b; color: #ffffff; }
+    .btn-custom-save { background: linear-gradient(135deg, #ff527b, #ff715b); color: white; border: none; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; }
+    .btn-custom-save:hover { background: linear-gradient(135deg, #ff715b, #ff527b); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 82, 123, 0.4); }
+    .btn-custom-back { background: transparent; border: 1px solid #2d2d3d; color: #7e7e8f; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-custom-back:hover { border-color: #5c5c70; color: #ffffff; }
+</style>
+<div class="custom-dashboard">
+    <h1 class="custom-title m-0 text-center">Editar Inscripción</h1>
+    <div class="custom-hr"></div>
+    <form asp-action="Editar" method="POST">
+        <input type="hidden" asp-for="InscripcionId"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-4">
+            <label asp-for="EventoId" class="form-label custom-label">Evento</label>
+            <select asp-for="EventoId" asp-items="ViewBag.EventoId" class="form-control custom-control">
+                <option value="">Seleccione un evento</option>
+            </select>
+            <span asp-validation-for="EventoId" class="text-danger small mt-1 d-block"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="AsistenteId" class="form-label custom-label">Asistente</label>
+            <select asp-for="AsistenteId" asp-items="ViewBag.AsistenteId" class="form-control custom-control">
+                <option value="">Seleccione un asistente</option>
+            </select>
+            <span asp-validation-for="AsistenteId" class="text-danger small mt-1 d-block"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="Estado" class="form-label custom-label">Estado</label>
+            <input asp-for="Estado" class="form-control custom-control" placeholder="Ingrese el estado"/>
+            <span asp-validation-for="Estado" class="text-danger small mt-1 d-block"></span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pt-2">
+            <a asp-action="Index" class="btn-custom-back">Volver</a>
+            <button type="submit" class="btn-custom-save">Guardar Cambios</button>
+        </div>
+    </form>
+</div>

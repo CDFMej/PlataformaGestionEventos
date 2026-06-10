@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Data;
@@ -5,6 +6,7 @@ using PlataformaGestionEventos.Models;
 
 namespace PlataformaGestionEventos.Controllers;
 
+[Authorize(Roles = "Administrador, Operador")]
 public class AsistenteController : Controller
 {
     private readonly ApplicationDbContext _context;

@@ -1,0 +1,136 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #1a1a22; font-family: sans-serif;">
+    <div class="row w-100 shadow-lg" style="max-width: 900px; border-radius: 20px; overflow: hidden; background-color: #1e1e26; border: 1px solid #2d2d3a;">
+        
+        <div class="col-md-6 p-5 d-flex flex-column justify-content-center align-items-center text-center" style="background-color: #18181f; border-right: 1px solid #2d2d3a;">
+            <div class="mb-4" style="color: #4da3b4;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
+                    <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.393 12.36 10.05 12 8 12s-3.393.36-4.224.803a4.2 4.2 0 0 0-.776.492z"/>
+                </svg>
+            </div>
+            <h2 class="fw-bold text-white mb-3" style="font-size: 1.8rem; line-height: 1.4;">
+                No hay eventos pequeños si la organización es grande.
+            </h2>
+            <p class="text-muted px-3" style="font-size: 0.95rem; color: #a0a0b0 !important;">
+                Toma el control de tus asistentes con Sala 12.
+            </p>
+        </div>
+
+        <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+            <form id="account" method="post" class="mx-auto w-100" style="max-width: 340px;">
+                
+                <div class="text-center mb-4">
+                    <h3 class="text-white fw-bold d-inline-block position-relative px-3">
+                        <span style="color: #4da3b4; position: absolute; left: -5px; top: -2px; font-size: 1.5rem;">⌈</span>
+                        Iniciar Sesión
+                        <span style="color: #4da3b4; position: absolute; right: -5px; top: -2px; font-size: 1.5rem;">⌋</span>
+                    </h3>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3" role="alert"></div>
+
+                <div class="mb-3 position-relative">
+                    <input asp-for="Input.Email" class="form-control custom-input" autocomplete="username" aria-required="true" placeholder="Correo Electrónico" />
+                    <span asp-validation-for="Input.Email" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-3 position-relative">
+                    <input asp-for="Input.Password" class="form-control custom-input" autocomplete="current-password" aria-required="true" placeholder="Contraseña" type="password" />
+                    <span asp-validation-for="Input.Password" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="form-check mb-4 text-start">
+                    <input class="form-check-input custom-checkbox" asp-for="Input.RememberMe" />
+                    <label asp-for="Input.RememberMe" class="form-check-label small text-muted" style="color: #a0a0b0 !important;">
+                        Recordarme
+                    </label>
+                </div>
+
+                <button id="login-submit" type="submit" class="w-100 btn fw-bold py-2 mb-3 custom-btn">
+                    Iniciar Sesión
+                </button>
+
+                <div class="text-center mt-3 fs-7">
+                    <p class="mb-1">
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="text-decoration-none custom-link">¿Olvidaste tu contraseña?</a>
+                    </p>
+                    <p class="mb-0 text-muted small" style="color: #707080 !important;">
+                        ¿No tienes cuenta? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none fw-bold custom-link-highlight">Regístrate aquí</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .custom-input {
+        background-color: #3d3d4e !important;
+        border: 1px solid #3d3d4e !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+    }
+    .custom-input::placeholder {
+        color: #e0e0e6 !important;
+        opacity: 1 !important;
+    }
+    
+    .custom-input:focus {
+        background-color: #13131a !important;
+        border-color: #4da3b4 !important;
+        box-shadow: 0 0 0 0.25rem rgba(77, 163, 180, 0.25) !important;
+        color: #ffffff !important;
+    }
+    
+    .custom-checkbox {
+        background-color: #13131a !important;
+        border-color: #3d3d4e !important;
+    }
+    .custom-checkbox:checked {
+        background-color: #4da3b4 !important;
+        border-color: #4da3b4 !important;
+    }
+    
+    .custom-btn {
+        background-color: #4da3b4 !important;
+        color: #0f0f12 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        transition: background-color 0.2s ease;
+    }
+    .custom-btn:hover {
+        background-color: #3b8a99 !important;
+        color: #ffffff !important;
+    }
+
+    .custom-link {
+        color: #808095 !important;
+        font-size: 0.85rem;
+    }
+    .custom-link:hover {
+        color: #4da3b4 !important;
+    }
+    .custom-link-highlight {
+        color: #4da3b4 !important;
+    }
+    .custom-link-highlight:hover {
+        text-decoration: underline !important;
+    }
+    
+    .fs-7 {
+        font-size: 0.85rem;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

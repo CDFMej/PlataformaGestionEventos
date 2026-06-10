@@ -65,11 +65,20 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Evento" asp-action="Index">Eventos</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Asistente" asp-action="Index">Asistentes</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Recurso" asp-action="Index">Recursos</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Inscripcion" asp-action="Index">Inscripciones</a></li>
+
+                    @if (User.Identity is { IsAuthenticated: true } && User.IsInRole("Administrador"))
+                    {
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                    }
+
+                    @if (User.Identity is { IsAuthenticated: true })
+                    {
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Evento" asp-action="Index">Eventos</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Asistente" asp-action="Index">Asistentes</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Recurso" asp-action="Index">Recursos</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Inscripcion" asp-action="Index">Inscripciones</a></li>
+                    }
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>

@@ -1,0 +1,146 @@
+﻿@page
+@using PlataformaGestionEventos.Utility
+@model RegisterModel
+@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #1a1a22; font-family: sans-serif;">
+    <div class="row w-100 shadow-lg" style="max-width: 900px; border-radius: 20px; overflow: hidden; background-color: #1e1e26; border: 1px solid #2d2d3a;">
+        
+        <div class="col-md-6 p-5 d-flex flex-column justify-content-center align-items-center text-center" style="background-color: #18181f; border-right: 1px solid #2d2d3a;">
+            <div class="mb-4" style="color: #4da3b4;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-1.2 6.544a.742.742 0 0 0-.115-.175L8 10.066l-1.685 1.303a.742.742 0 0 0-.115.175C5.244 12.27 4.28 12.8 3.7 13.5a.5.5 0 0 0 .42.75h7.76a.5.5 0 0 0 .42-.75c-.58-.7-1.544-1.23-2.5-1.456"/>
+                    <path fill-rule="evenodd" d="M12.5 1a.5.5 0 0 1 .5.5V3h1.5a.5.5 0 0 1 0 1H13v1.5a.5.5 0 0 1-1 0V4h-1.5a.5.5 0 0 1 0-1H12V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </div>
+            <h2 class="fw-bold text-white mb-3" style="font-size: 1.8rem; line-height: 1.4;">
+                Únete a la mejor gestión de tus eventos.
+            </h2>
+            <p class="text-muted px-3" style="font-size: 0.95rem; color: #a0a0b0 !important;">
+                Crea una cuenta en Sala 12 y empieza a coordinar asistentes de forma masiva y ordenada hoy mismo.
+            </p>
+        </div>
+
+        <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="mx-auto w-100" style="max-width: 340px;">
+                
+                <div class="text-center mb-4">
+                    <h3 class="text-white fw-bold d-inline-block position-relative px-3">
+                        <span style="color: #4da3b4; position: absolute; left: -5px; top: -2px; font-size: 1.5rem;">⌈</span>
+                        Crear Cuenta
+                        <span style="color: #4da3b4; position: absolute; right: -5px; top: -2px; font-size: 1.5rem;">⌋</span>
+                    </h3>
+                    <p class="text-muted small mt-2" style="color: #707080 !important;">Completa tus datos de acceso</p>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3" role="alert"></div>
+
+                <div class="mb-3">
+                    <input asp-for="Input.Email" class="form-control custom-input" autocomplete="username" aria-required="true" placeholder="Correo Electrónico" />
+                    <span asp-validation-for="Input.Email" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input asp-for="Input.Password" class="form-control custom-input" autocomplete="new-password" aria-required="true" placeholder="Contraseña" type="password" />
+                    <span asp-validation-for="Input.Password" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control custom-input" autocomplete="new-password" aria-required="true" placeholder="Confirmar Contraseña" type="password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger small d-block mt-1"></span>
+                </div>
+                
+                    <div class="mb-4 text-white">
+                        <label class="form-label small fw-bold" style="color: #a0a0b0;">Seleccionar Rol para la nueva cuenta</label>
+                        <div class="d-flex gap-3 justify-content-start">
+                            <div class="form-check custom-radio">
+                                <input class="form-check-input" type="radio" name="radUsuarioRol" id="rolAdmin" value="@CNT.Administrador" checked />
+                                <label class="form-check-label small" for="rolAdmin">
+                                    Administrador
+                                </label>
+                            </div>
+                            <div class="form-check custom-radio">
+                                <input class="form-check-input" type="radio" name="radUsuarioRol" id="rolOperador" value="@CNT.Operador" />
+                                <label class="form-check-label small" for="rolOperador">
+                                    Operador
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                <button id="registerSubmit" type="submit" class="w-100 btn fw-bold py-2 mb-3 custom-btn">
+                    Registrarse
+                </button>
+
+                <div class="text-center mt-3 fs-7">
+                    <p class="mb-0 text-muted small" style="color: #707080 !important;">
+                        ¿Ya tienes una cuenta? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none fw-bold custom-link-highlight">Inicia sesión aquí</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .custom-input {
+        background-color: #13131a !important;
+        border: 1px solid #3d3d4e !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+    }
+ 
+    .custom-input::placeholder {
+        color: #a0a0b0 !important; 
+        opacity: 1 !important;
+    }
+    
+    .custom-input:focus {
+        background-color: #13131a !important;
+        border-color: #4da3b4 !important;
+        box-shadow: 0 0 0 0.25rem rgba(77, 163, 180, 0.25) !important;
+        color: #ffffff !important;
+    }
+
+    .custom-btn {
+        background-color: #4da3b4 !important;
+        color: #0f0f12 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        transition: background-color 0.2s ease;
+    }
+    .custom-btn:hover {
+        background-color: #3b8a99 !important;
+        color: #ffffff !important;
+    }
+
+    .custom-link-highlight {
+        color: #4da3b4 !important;
+    }
+    .custom-link-highlight:hover {
+        text-decoration: underline !important;
+    }
+    .custom-radio .form-check-input {
+        background-color: #13131a;
+        border-color: #3d3d4e;
+    }
+    .custom-radio .form-check-input:checked {
+        background-color: #4da3b4;
+        border-color: #4da3b4;
+    }
+    .custom-radio .form-check-input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(77, 163, 180, 0.25);
+    }
+
+    .fs-7 {
+        font-size: 0.85rem;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,39 @@
+@model Microsoft.AspNetCore.Identity.IdentityUser
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+<style>
+    .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); max-width: 600px; margin: 0 auto; }
+    .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
+    .custom-hr { border-top: 1px solid #2d2d3d; opacity: 1; margin: 1.5rem 0; }
+    .custom-label { color: #7e7e8f; font-weight: 500; font-size: 0.9rem; margin-bottom: 8px; }
+    .custom-control { background-color: #262633; border: 1px solid #2d2d3d; color: #ffffff; border-radius: 10px; padding: 12px 16px; font-size: 0.95rem; transition: all 0.2s ease; }
+    .custom-control:focus { background-color: #262633; border-color: #ff527b; color: #ffffff; box-shadow: 0 0 0 3px rgba(255, 82, 123, 0.15); }
+    .custom-control::placeholder { color: #5c5c70; }
+    .btn-custom-save { background: linear-gradient(135deg, #ff527b, #ff715b); color: white; border: none; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; }
+    .btn-custom-save:hover { background: linear-gradient(135deg, #ff715b, #ff527b); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 82, 123, 0.4); }
+    .btn-custom-back { background: transparent; border: 1px solid #2d2d3d; color: #7e7e8f; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-custom-back:hover { border-color: #5c5c70; color: #ffffff; }
+</style>
+<div class="custom-dashboard">
+    <h1 class="custom-title m-0 text-center">Editar Usuario</h1>
+    <div class="custom-hr"></div>
+    <form asp-action="Editar" method="POST">
+        <input type="hidden" asp-for="Id"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-4">
+            <label asp-for="Email" class="form-label custom-label">Correo Electrónico / Usuario</label>
+            <input asp-for="Email" class="form-control custom-control" placeholder="ejemplo@correo.com"/>
+            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="PhoneNumber" class="form-label custom-label">Teléfono</label>
+            <input asp-for="PhoneNumber" class="form-control custom-control" placeholder="Ingresa el número telefónico"/>
+            <span asp-validation-for="PhoneNumber" class="text-danger small mt-1 d-block"></span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pt-2">
+            <a asp-action="Index" class="btn-custom-back">Volver</a>
+            <button type="submit" class="btn-custom-save">Guardar Cambios</button>
+        </div>
+    </form>
+</div>

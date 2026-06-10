@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Data;
 using PlataformaGestionEventos.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaGestionEventos.Controllers;
 
+[Authorize(Roles = "Administrador, Operador")]
 public class InscripcionController : Controller
 {
     private readonly ApplicationDbContext _context;

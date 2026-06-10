@@ -1,0 +1,44 @@
+@model Microsoft.AspNetCore.Identity.IdentityUser
+@{
+    ViewData["Title"] = "Detalle de Usuario";
+    var estaBloqueado = Model.LockoutEnd != null && Model.LockoutEnd > DateTime.Now;
+}
+<style>
+    .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); max-width: 600px; margin: 0 auto; }
+    .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
+    .custom-hr { border-top: 1px solid #2d2d3d; opacity: 1; margin: 1.5rem 0; }
+    .detail-row { background-color: #262633; border-radius: 10px; padding: 14px 20px; margin-bottom: 12px; }
+    .detail-label { color: #7e7e8f; font-weight: 500; font-size: 0.9rem; }
+    .detail-value { color: #ffffff; font-size: 1rem; font-weight: 400; }
+    .btn-custom-edit { background: linear-gradient(135deg, #ff527b, #ff715b); color: white; border: none; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-custom-edit:hover { background: linear-gradient(135deg, #ff715b, #ff527b); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 82, 123, 0.4); }
+    .btn-custom-back { background: transparent; border: 1px solid #2d2d3d; color: #7e7e8f; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-custom-back:hover { border-color: #5c5c70; color: #ffffff; }
+</style>
+<div class="custom-dashboard">
+    <h1 class="custom-title m-0 text-center">Detalle de Usuario</h1>
+    <div class="custom-hr"></div>
+    <div class="detail-row d-flex justify-content-between align-items-center">
+        <span class="detail-label">Id de Usuario</span>
+        <span class="detail-value" style="font-family: monospace; font-size: 0.9rem;">@Model.Id</span>
+    </div>
+    <div class="detail-row d-flex justify-content-between align-items-center">
+        <span class="detail-label">Email / Usuario</span>
+        <span class="detail-value">@Model.Email</span>
+    </div>
+    <div class="detail-row d-flex justify-content-between align-items-center">
+        <span class="detail-label">Teléfono</span>
+        <span class="detail-value">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "No registrado" : Model.PhoneNumber)</span>
+    </div>
+    <div class="detail-row d-flex justify-content-between align-items-center">
+        <span class="detail-label">Estado de Acceso</span>
+        <span class="detail-value" style="color: @(estaBloqueado ? "#dc3545" : "#28a745"); font-weight: 500;">
+            @(estaBloqueado ? "Bloqueado / Suspendido" : "Activo")
+        </span>
+    </div>
+    <div class="custom-hr"></div>
+    <div class="d-flex justify-content-between align-items-center pt-2">
+        <a asp-action="Index" class="btn-custom-back">Volver</a>
+        <a asp-action="Editar" asp-route-id="@Model.Id" class="btn-custom-edit">Editar Usuario</a>
+    </div>
+</div>

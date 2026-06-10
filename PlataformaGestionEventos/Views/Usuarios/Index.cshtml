@@ -1,0 +1,87 @@
+@using Microsoft.AspNetCore.Identity
+@model System.Collections.IEnumerable
+@{
+ViewData["Title"] = "Lista de Usuarios";
+}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }
+    .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
+    .btn-custom-add { background: linear-gradient(135deg, #ff527b, #ff715b); color: white; border: none; padding: 10px 24px; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-custom-add:hover { background: linear-gradient(135deg, #ff715b, #ff527b); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 82, 123, 0.4); }
+    .custom-table-container { margin-top: 1.5rem; }
+    .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; color: #a5a5b1; }
+    .custom-table th { color: #7e7e8f; font-weight: 500; text-transform: capitalize; padding: 12px 16px; border: none; font-size: 0.9rem; }
+    .custom-table tbody tr { background-color: #262633; transition: all 0.2s ease; }
+    .custom-table tbody tr td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; padding-left: 20px; }
+    .custom-table tbody tr td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-right: 20px; }
+    .custom-table tbody td { padding: 16px; border: none; vertical-align: middle; font-size: 0.95rem; }
+    .custom-table tbody tr.row-highlighted { background: linear-gradient(90deg, #624b91, #3b508a); color: #ffffff; }
+    .custom-table tbody tr.row-highlighted td { color: #ffffff; }
+    .btn-action { background: transparent; border: none; color: #7e7e8f; padding: 6px 10px; font-size: 1.1rem; transition: color 0.2s; text-decoration: none; }
+    .btn-action:hover { color: #ffffff; }
+    .btn-action.edit:hover { color: #ffc107; }
+    .btn-action.view:hover { color: #0dcaf0; }
+    .btn-action.delete:hover { color: #dc3545; }
+    .row-highlighted .btn-action { color: #e2e2e2; }
+    .row-highlighted .btn-action:hover { color: #ffffff; }
+    .btn-action-submit { background: transparent; border: none; padding: 0; }
+</style>
+<div class="custom-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="custom-title m-0">Usuarios</h1>
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn-custom-add"><span>+</span> Nuevo Usuario</a>
+    </div>
+    <div class="table-responsive custom-table-container">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email / Usuario</th>
+                <th>Estado</th>
+                <th style="width: 300px; text-align: center">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{ bool esPrimeraFila = true; }
+            @foreach (IdentityUser usuario in Model)
+            {
+            var estaBloqueado = usuario.LockoutEnd != null && usuario.LockoutEnd > DateTime.Now;
+            <tr class="@(esPrimeraFila ? "row-highlighted" : "")">
+                <td style="font-weight: 500; font-family: monospace; font-size: 0.85rem;">@usuario.Id</td>
+                <td>@usuario.Email</td>
+                <td>@(estaBloqueado ? "Bloqueado" : "Activo")</td>
+                <td style="text-align: center; vertical-align: middle;">
+                    @if (estaBloqueado)
+                    {
+                    <form asp-action="Desbloquear" asp-route-id="@usuario.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-action btn-action-submit @(esPrimeraFila ? "text-white font-weight-bold" : "edit")" title="Activar Acceso">
+                            <i class="bi @(esPrimeraFila ? "bi-check-lg" : "bi-unlock-fill")"></i>
+                        </button>
+                    </form>
+                    }
+                    else
+                    {
+                    <form asp-action="Bloquear" asp-route-id="@usuario.Id" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que deseas suspender este usuario?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-action btn-action-submit @(esPrimeraFila ? "text-white font-weight-bold" : "delete")" title="Suspender Cuenta">
+                            <i class="bi @(esPrimeraFila ? "bi-x-lg" : "bi-lock-fill")"></i>
+                        </button>
+                    </form>
+                    }
+                    <a asp-action="Detalles" asp-route-id="@usuario.Id" class="btn-action view" title="Ver"><i class="bi bi-eye"></i></a>
+                    <a asp-action="Editar" asp-route-id="@usuario.Id" class="btn-action edit" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                    <form asp-action="Eliminar" asp-route-id="@usuario.Id" method="post" class="d-inline" onsubmit="return confirm('¿Desea eliminar permanentemente este usuario?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-action delete" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                    </form>
+                </td>
+            </tr>
+            esPrimeraFila = false;
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

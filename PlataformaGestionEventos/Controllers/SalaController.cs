@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using PlataformaGestionEventos.Data;
 using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaGestionEventos.Controllers;
 
+[Authorize(Roles = "Administrador, Operador")]
 public class SalaController: Controller
 {
     

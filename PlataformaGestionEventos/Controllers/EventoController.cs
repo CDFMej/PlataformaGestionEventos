@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Data;
 using PlataformaGestionEventos.Models;
 using PlataformaGestionEventos.ViewModels;
-using PlataformaGestionEventos.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaGestionEventos.Controllers;
 
+[Authorize(Roles = "Administrador, Operador")]
 public class EventoController : Controller
 {
     private readonly ApplicationDbContext _context;

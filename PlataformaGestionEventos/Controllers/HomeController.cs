@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Data;
 using PlataformaGestionEventos.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaGestionEventos.Controllers;
 
+[Authorize(Roles = "Administrador, Operador")]
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _context;

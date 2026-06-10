@@ -3,6 +3,8 @@
 ViewData["Title"] = "Lista de Salas";
 }
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
     .custom-dashboard {
         font-family: 'Poppins', sans-serif;
@@ -85,7 +87,7 @@ ViewData["Title"] = "Lista de Salas";
         border: none;
         color: #7e7e8f;
         padding: 6px 10px;
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         transition: color 0.2s;
         text-decoration: none;
     }
@@ -96,6 +98,7 @@ ViewData["Title"] = "Lista de Salas";
     .row-highlighted .btn-action { color: #e2e2e2; }
     .row-highlighted .btn-action:hover { color: #ffffff; }
 </style>
+
 <div class="custom-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="custom-title m-0">Salas</h1>
@@ -121,18 +124,30 @@ ViewData["Title"] = "Lista de Salas";
                 <td>@sala.nombre</td>
                 <td>@sala.capacidad</td>
                 <td>@sala.ubicacion</td>
-                <td style="text-align: center;">
+                <td style="text-align: center; vertical-align: middle;">
                     @if (esPrimeraFila)
                     {
-                    <a asp-action="Editar" asp-route-id="@sala.SalaId" class="btn-action font-weight-bold" title="Editar">✓</a>
-                    <a asp-action="Ver" asp-route-id="@sala.SalaId" class="btn-action view" title="Ver">👁️</a>
-                    <a asp-action="Eliminar" asp-route-id="@sala.SalaId" class="btn-action font-weight-bold" title="Eliminar">✕</a>
+                    <a asp-action="Editar" asp-route-id="@sala.SalaId" class="btn-action font-weight-bold" title="Editar">
+                        <i class="bi bi-check-lg"></i>
+                    </a>
+                    <a asp-action="Ver" asp-route-id="@sala.SalaId" class="btn-action view" title="Ver">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-action="Eliminar" asp-route-id="@sala.SalaId" class="btn-action font-weight-bold" title="Eliminar">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
                     }
                     else
                     {
-                    <a asp-action="Editar" asp-route-id="@sala.SalaId" class="btn-action edit" title="Editar">✏️</a>
-                    <a asp-action="Ver" asp-route-id="@sala.SalaId" class="btn-action view" title="Ver">👁️</a>
-                    <a asp-action="Eliminar" asp-route-id="@sala.SalaId" class="btn-action delete" title="Eliminar">🗑️</a>
+                    <a asp-action="Editar" asp-route-id="@sala.SalaId" class="btn-action edit" title="Editar">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <a asp-action="Ver" asp-route-id="@sala.SalaId" class="btn-action view" title="Ver">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-action="Eliminar" asp-route-id="@sala.SalaId" class="btn-action delete" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </a>
                     }
                 </td>
             </tr>

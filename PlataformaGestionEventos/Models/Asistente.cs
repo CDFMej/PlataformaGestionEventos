@@ -15,6 +15,10 @@ public class Asistente
     [EmailAddress]
     public string Correo { get; set; }
 
+    [Required(ErrorMessage = "Ingrese la identidad")]
+    [StringLength(13, ErrorMessage = "La identidad no puede exceder los 13 caracteres")]
+    public string Identidad { get; set; }
+
     [Required(ErrorMessage = "Ingrese el teléfono")]
     [Phone]
     public string Telefono { get; set; }

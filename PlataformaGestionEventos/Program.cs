@@ -54,12 +54,14 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<PlataformaGestionEventos.Data.ApplicationDbContext>();
-        context.Database.Migrate();       
+        context.Database.Migrate();
+
+        await PlataformaGestionEventos.Data.DbInitializer.Initialize(services);
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error al sincronizar la base de datos.");
+        logger.LogError(ex, "Error al sincronizar o inicializar la base de datos.");
     }
 }
 

@@ -22,7 +22,7 @@ using PlataformaGestionEventos.Utility;
 
 namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = "Administrador")]
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;

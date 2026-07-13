@@ -12,11 +12,12 @@ public class Asistente
     public string Nombre { get; set; }
 
     [Required(ErrorMessage = "Ingrese el correo")]
-    [EmailAddress]
+    [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
+    [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Por favor, ingrese un correo electrónico válido.")]
     public string Correo { get; set; }
 
     [Required(ErrorMessage = "Ingrese la identidad")]
-    [StringLength(13, ErrorMessage = "La identidad no puede exceder los 13 caracteres")]
+    [StringLength(13, MinimumLength = 13,ErrorMessage = "La identidad debe tener exactamente 13 caracteres.")]
     public string Identidad { get; set; }
 
     [StringLength(12, MinimumLength = 8, ErrorMessage = "El teléfono debe tener entre 8 y 12 dígitos.")]

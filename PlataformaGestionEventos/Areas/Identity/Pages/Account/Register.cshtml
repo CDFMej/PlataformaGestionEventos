@@ -42,13 +42,24 @@
                     <span asp-validation-for="Input.Email" class="text-danger small d-block mt-1"></span>
                 </div>
 
-                <div class="mb-3">
-                    <input asp-for="Input.Password" class="form-control custom-input" autocomplete="new-password" aria-required="true" placeholder="Contraseña" type="password" />
+               <div class="mb-3">
+                    <div class="input-group">
+                        <input asp-for="Input.Password" class="form-control custom-input" id="passwordInput" autocomplete="new-password" aria-required="true" placeholder="Contraseña" type="password" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('passwordInput', 'eyeIcon1')" style="border-color: #3d3d4e; background: #13131a;">
+                            <i id="eyeIcon1" class="bi bi-eye-slash"></i>
+                        </button>
+                    </div>
                     <span asp-validation-for="Input.Password" class="text-danger small d-block mt-1"></span>
                 </div>
 
+                <!-- Campo Confirmar Contraseña -->
                 <div class="mb-3">
-                    <input asp-for="Input.ConfirmPassword" class="form-control custom-input" autocomplete="new-password" aria-required="true" placeholder="Confirmar Contraseña" type="password" />
+                    <div class="input-group">
+                        <input asp-for="Input.ConfirmPassword" class="form-control custom-input" id="confirmPasswordInput" autocomplete="new-password" aria-required="true" placeholder="Confirmar Contraseña" type="password" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPasswordInput', 'eyeIcon2')" style="border-color: #3d3d4e; background: #13131a;">
+                            <i id="eyeIcon2" class="bi bi-eye-slash"></i>
+                        </button>
+                    </div>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger small d-block mt-1"></span>
                 </div>
                 
@@ -143,4 +154,20 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        }
+    </script>
 }

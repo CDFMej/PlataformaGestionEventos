@@ -37,6 +37,7 @@ ViewData["Title"] = "Lista de Asistentes";
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
+                <th>Identidad</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
                 <th style="width: 200px; text-align: center;">Acciones</th>
@@ -49,6 +50,7 @@ ViewData["Title"] = "Lista de Asistentes";
             <tr class="@(esPrimeraFila ? "row-highlighted" : "")">
                 <td style="font-weight: 500;">@asistente.AsistenteId</td>
                 <td>@asistente.Nombre</td>
+                <td>@asistente.Identidad</td>
                 <td>@asistente.Correo</td>
                 <td>@asistente.Telefono</td>
                 <td style="text-align: center; vertical-align: middle;">

@@ -30,4 +30,22 @@ public class Evento
     public ICollection<RecursoEvento>? RecursosEvento { get; set; }
     [NotMapped]
     public List<EventoRecursoViewModel>? RecursosSeleccionados { get; set; }
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+     
+        if (FechaInicio < DateTime.Now)
+        {
+            yield return new ValidationResult(
+                "La fecha de inicio no puede ser anterior al día de hoy.",
+                new[] { nameof(FechaInicio) });
+        }
+
+
+        if (FechaFin <= FechaInicio)
+        {
+            yield return new ValidationResult(
+                "La fecha de fin debe ser posterior a la fecha de inicio.",
+                new[] { nameof(FechaFin) });
+        }
+    }
 }

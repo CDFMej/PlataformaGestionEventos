@@ -100,3 +100,23 @@
         </div>
     </form>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fechaInicio = document.getElementById("FechaInicio");
+            const fechaFin = document.getElementById("FechaFin");
+
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const isoNow = now.toISOString().slice(0, 16);
+
+            fechaInicio.min = isoNow;
+            fechaFin.min = isoNow;
+
+            fechaInicio.addEventListener("change", function () {
+                fechaFin.min = fechaInicio.value;
+            });
+        });
+    </script>
+}

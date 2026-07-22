@@ -20,11 +20,18 @@ namespace PlataformaGestionEventos.Migrations
                     Nombre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Identidad = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Correo = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefono = table.Column<string>(type: "TEXT", nullable: false)
+                    Telefono = table.Column<string>(type: "TEXT", nullable: false),
+                    UsuarioId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Asistentes", x => x.AsistenteId);
+                    table.ForeignKey(
+                    name: "FK_Asistentes_AspNetUsers_UsuarioId",
+                    column: x => x.UsuarioId,
+                    principalTable: "AspNetUsers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

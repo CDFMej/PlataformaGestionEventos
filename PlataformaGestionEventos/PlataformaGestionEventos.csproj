@@ -16,6 +16,9 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7" PrivateAssets="all" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+        <PackageReference Include="NuGet.Packaging" Version="7.6.0" />
+        <PackageReference Include="NuGet.Protocol" Version="7.6.0" />
+        <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
     </ItemGroup>
 
 </Project>

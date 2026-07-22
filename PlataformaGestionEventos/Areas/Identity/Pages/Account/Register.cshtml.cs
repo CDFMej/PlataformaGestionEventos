@@ -19,6 +19,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PlataformaGestionEventos.Utility;
+using Microsoft.EntityFrameworkCore; 
+using PlataformaGestionEventos.Data; 
+using PlataformaGestionEventos.Models; 
+using PlataformaGestionEventos.Utility;
 
 namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
 {
@@ -32,6 +36,7 @@ namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -39,7 +44,8 @@ namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             RoleManager<IdentityRole> roleManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -48,6 +54,7 @@ namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -102,6 +109,10 @@ namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string Nombre { get; set; }
+            public string Identidad { get; set; }
+            public string Telefono { get; set; }
         }
 
 
@@ -127,20 +138,51 @@ namespace PlataformaGestionEventos.Areas.Identity.Pages.Account
                 {
                     if (!await _roleManager.RoleExistsAsync(CNT.Administrador))
                     {
-                       await _roleManager.CreateAsync(new IdentityRole(CNT.Administrador));
-                       await _roleManager.CreateAsync(new IdentityRole(CNT.Operador));
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Administrador));
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Operador));
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Asistente));
                     }
-                    
+
                     string rol = Request.Form["radUsuarioRol"].ToString();
-                    if (rol == CNT.Administrador)
+                    if (string.IsNullOrEmpty(rol))
                     {
-                        await _userManager.AddToRoleAsync(user, CNT.Administrador);
+                        rol = CNT.Asistente;
                     }
-                    else if (rol == CNT.Operador)
+
+                    if (rol == CNT.Asistente)
                     {
-                        await _userManager.AddToRoleAsync(user, CNT.Operador); 
+                        if (string.IsNullOrWhiteSpace(Input.Nombre))
+                        {
+                            ModelState.AddModelError("Input.Nombre", "El campo Nombre es obligatorio para los asistentes.");
+                        }
+                        if (string.IsNullOrWhiteSpace(Input.Identidad))
+                        {
+                            ModelState.AddModelError("Input.Identidad", "El campo Identidad es obligatorio para los asistentes.");
+                        }
+                        if (string.IsNullOrWhiteSpace(Input.Telefono))
+                        {
+                            ModelState.AddModelError("Input.Telefono", "El campo Teléfono es obligatorio para los asistentes.");
+                        }
                     }
+
+                    await _userManager.AddToRoleAsync(user, rol);
+
                     
+                    if (rol == CNT.Asistente)
+                    {
+                        var asistente = new Asistente
+                        {
+                            Nombre = Input.Nombre ?? string.Empty,
+                            Identidad = Input.Identidad ?? string.Empty,
+                            Correo = user.Email ?? string.Empty,
+                            Telefono = Input.Telefono,
+                            UsuarioId = user.Id 
+                        };
+
+                        _context.Asistentes.Add(asistente);
+                        await _context.SaveChangesAsync();
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

@@ -231,9 +231,16 @@ namespace PlataformaGestionEventos.Data.Migrations
 
                     b.Property<string>("Telefono")
                         .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("AsistenteId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Asistentes");
                 });
@@ -418,6 +425,17 @@ namespace PlataformaGestionEventos.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PlataformaGestionEventos.Models.Asistente", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PlataformaGestionEventos.Models.Evento", b =>

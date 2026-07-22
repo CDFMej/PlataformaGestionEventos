@@ -42,7 +42,7 @@
                     <span asp-validation-for="Input.Email" class="text-danger small d-block mt-1"></span>
                 </div>
 
-               <div class="mb-3">
+                <div class="mb-3">
                     <div class="input-group">
                         <input asp-for="Input.Password" class="form-control custom-input" id="passwordInput" autocomplete="new-password" aria-required="true" placeholder="Contraseña" type="password" />
                         <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('passwordInput', 'eyeIcon1')" style="border-color: #3d3d4e; background: #13131a;">
@@ -63,9 +63,11 @@
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger small d-block mt-1"></span>
                 </div>
                 
+                @if (User.IsInRole(CNT.Administrador))
+                {
                     <div class="mb-4 text-white">
                         <label class="form-label small fw-bold" style="color: #a0a0b0;">Seleccionar Rol para la nueva cuenta</label>
-                        <div class="d-flex gap-3 justify-content-start">
+                        <div class="d-flex gap-3 justify-content-start flex-wrap">
                             <div class="form-check custom-radio">
                                 <input class="form-check-input" type="radio" name="radUsuarioRol" id="rolAdmin" value="@CNT.Administrador" checked />
                                 <label class="form-check-label small" for="rolAdmin">
@@ -78,8 +80,30 @@
                                     Operador
                                 </label>
                             </div>
+                            <div class="form-check custom-radio">
+                                <input class="form-check-input" type="radio" name="radUsuarioRol" id="rolAsistente" value="@CNT.Asistente" />
+                                <label class="form-check-label small" for="rolAsistente">
+                                    Asistente
+                                </label>
+                            </div>
                         </div>
                     </div>
+                }
+
+                <div id="camposAsistente" style="display: none;">
+                    <div class="mb-3">
+                        <input asp-for="Input.Nombre" class="form-control custom-input" placeholder="Nombre completo" />
+                        <span asp-validation-for="Input.Nombre" class="text-danger small d-block mt-1"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="Input.Identidad" class="form-control custom-input" placeholder="Número de Identidad" />
+                        <span asp-validation-for="Input.Identidad" class="text-danger small d-block mt-1"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="Input.Telefono" class="form-control custom-input" placeholder="Número de Teléfono" />
+                        <span asp-validation-for="Input.Telefono" class="text-danger small d-block mt-1"></span>
+                    </div>
+                </div>
 
                 <button id="registerSubmit" type="submit" class="w-100 btn fw-bold py-2 mb-3 custom-btn">
                     Registrarse
@@ -169,5 +193,31 @@
                 icon.classList.add("bi-eye-slash");
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const radiosRoles = document.querySelectorAll("input[name='radUsuarioRol']");
+            const contenedorAsistente = document.getElementById("camposAsistente");
+
+            function actualizarVisibilidadCampos() {
+                let rolSeleccionado = "";
+                radiosRoles.forEach(radio => {
+                    if (radio.checked) {
+                        rolSeleccionado = radio.value;
+                    }
+                });
+
+                if (rolSeleccionado === "@CNT.Asistente" || rolSeleccionado === "") {
+                    contenedorAsistente.style.display = "block";
+                } else {
+                    contenedorAsistente.style.display = "none";
+                }
+            }
+
+            radiosRoles.forEach(radio => {
+                radio.addEventListener("change", actualizarVisibilidadCampos);
+            });
+
+            actualizarVisibilidadCampos();
+        });
     </script>
 }

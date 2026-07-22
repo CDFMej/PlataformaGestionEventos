@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using PlataformaGestionEventos.Utility; // Asegúrate de que esta referencia sea correcta
+using PlataformaGestionEventos.Utility;
 
 namespace PlataformaGestionEventos.Data;
 
@@ -13,14 +13,13 @@ public static class DbInitializer
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-        // 1. Crear Roles si no existen
         if (!await roleManager.RoleExistsAsync(CNT.Administrador))
         {
             await roleManager.CreateAsync(new IdentityRole(CNT.Administrador));
             await roleManager.CreateAsync(new IdentityRole(CNT.Operador));
+            await roleManager.CreateAsync(new IdentityRole(CNT.Asistente));
         }
 
-        // 2. Crear Usuario Administrador si no existe
         var adminEmail = "Admin@admin.com";
         var user = await userManager.FindByEmailAsync(adminEmail);
 

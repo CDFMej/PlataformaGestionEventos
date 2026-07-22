@@ -1,21 +1,24 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PlataformaGestionEventos.Data;
 using PlataformaGestionEventos.Models;
 using PlataformaGestionEventos.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaGestionEventos.Controllers;
 
-[Authorize(Roles = "Administrador, Operador")]
+[Authorize(Roles = "Administrador, Operador, Asistente")]
 public class EventoController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public EventoController(ApplicationDbContext context)
+    public EventoController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     //Metodo Get

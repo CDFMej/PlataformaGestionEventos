@@ -6,29 +6,40 @@
 
 <div class="container mt-4">
     <h2 class="text-white mb-4">Eventos Disponibles para Inscribirse</h2>
-    
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mensaje"]</div>
+    }
+    @if (TempData["Aviso"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Aviso"]</div>
+    }
+
     <div class="row">
         @foreach (var evento in Model)
         {
-            // Validar que el evento aún no haya pasado
-            if (evento.FechaInicio > DateTime.Now)
-            {
-                <div class="col-md-4 mb-3">
-                    <div class="card bg-dark text-white border-secondary h-100 p-3">
-                        <div class="card-body">
-                            <h5 class="card-title text-info">@evento.Nombre</h5>
-                            <p class="card-text text-muted">@evento.Descripcion</p>
-                            <p class="small"><strong>Fecha:</strong> @evento.FechaInicio.ToString("g")</p>
-                            
-                            <!-- Botón de Inscripción -->
+            <div class="col-md-4 mb-3">
+                <div class="card bg-dark text-white border-secondary h-100 p-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">@evento.Nombre</h5>
+                        <p class="card-text text-muted">@evento.Descripcion</p>
+                        <p class="small"><strong>Fecha:</strong> @evento.FechaInicio.ToString("g")</p>
+
+                        @if (User.IsInRole("Asistente"))
+                        {
                             <form asp-action="Inscribirse" method="post">
                                 <input type="hidden" name="eventoId" value="@evento.EventoId" />
                                 <button type="submit" class="btn btn-outline-info w-100 mt-2">Inscribirme</button>
                             </form>
-                        </div>
+                        }
                     </div>
                 </div>
-            }
+            </div>
         }
     </div>
 </div>

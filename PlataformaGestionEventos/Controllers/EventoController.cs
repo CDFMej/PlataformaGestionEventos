@@ -390,4 +390,97 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
         }
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Disponibles()
+    {
+        var eventos = await _context.Eventos
+            .Include(e => e.Sala)
+            .Where(e => e.FechaInicio > DateTime.Now)
+            .ToListAsync();
+        return View(eventos);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Asistente")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Inscribirse(int eventoId)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Challenge();
+        }
+
+        var asistente = await _context.Asistentes
+            .FirstOrDefaultAsync(a => a.UsuarioId == userId);
+
+        if (asistente == null)
+        {
+            TempData["Error"] = "No se encontró un perfil de asistente asociado a tu cuenta.";
+            return RedirectToAction(nameof(Disponibles));
+        }
+
+        var evento = await _context.Eventos
+            .Include(e => e.Inscripciones)
+            .FirstOrDefaultAsync(e => e.EventoId == eventoId);
+
+        if (evento == null)
+        {
+            return NotFound();
+        }
+
+        bool yaInscrito = await _context.Inscripciones
+            .AnyAsync(i => i.EventoId == eventoId && i.AsistenteId == asistente.AsistenteId);
+
+        if (!yaInscrito)
+        {
+            var totalInscritos = await _context.Inscripciones.CountAsync(i => i.EventoId == eventoId);
+            if (totalInscritos >= evento.CapacidadMaxima)
+            {
+                TempData["Error"] = "Lo sentimos, el evento ha alcanzado su capacidad máxima.";
+                return RedirectToAction(nameof(Disponibles));
+            }
+
+            var inscripcion = new Inscripcion
+            {
+                EventoId = eventoId,
+                AsistenteId = asistente.AsistenteId,
+                FechaInscripcion = DateTime.Now
+            };
+
+            _context.Inscripciones.Add(inscripcion);
+            await _context.SaveChangesAsync();
+            TempData["Mensaje"] = "Te has inscrito al evento exitosamente.";
+        }
+        else
+        {
+            TempData["Aviso"] = "Ya estás inscrito en este evento.";
+        }
+
+        return RedirectToAction(nameof(MisEventos));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Asistente")]
+    public async Task<IActionResult> MisEventos()
+    {
+        var userId = _userManager.GetUserId(User);
+        var asistente = await _context.Asistentes
+            .FirstOrDefaultAsync(a => a.UsuarioId == userId);
+
+        if (asistente == null)
+        {
+            return View(new List<Inscripcion>());
+        }
+
+        var misInscripciones = await _context.Inscripciones
+            .Where(i => i.AsistenteId == asistente.AsistenteId)
+            .Include(i => i.Evento)
+                .ThenInclude(e => e.Sala)
+            .ToListAsync();
+
+        return View(misInscripciones);
+    }
 }

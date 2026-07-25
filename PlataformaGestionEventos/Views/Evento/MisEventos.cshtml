@@ -1,0 +1,38 @@
+@model IEnumerable<PlataformaGestionEventos.Models.Inscripcion>
+
+@{
+    ViewData["Title"] = "Mis Eventos";
+}
+
+<div class="container mt-4">
+    <h2 class="text-white mb-4">Mis Inscripciones</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Aún no estás inscrito en ningún evento.</p>
+    }
+    else
+    {
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Evento</th>
+                    <th>Sala</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Inscripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Evento?.Nombre</td>
+                        <td>@item.Evento?.Sala?.SalaId</td>
+                        <td>@item.Evento?.FechaInicio.ToString("g")</td>
+                        <td>@item.FechaInscripcion.ToString("g")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -19,13 +19,14 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        ViewBag.TotalSalas = await _context.Salas.CountAsync();
-        ViewBag.TotalEventos = await _context.Eventos.CountAsync();
-        ViewBag.TotalAsistentes = await _context.Asistentes.CountAsync();
-        ViewBag.TotalInscripciones = await _context.Inscripciones.CountAsync();
-        ViewBag.TotalRecursos = await _context.Recursos.CountAsync();
+        ViewBag.TotalSalas = await _context.Salas.CountAsync(s => s.Activo);
+        ViewBag.TotalEventos = await _context.Eventos.CountAsync(e => e.Activo);
+        ViewBag.TotalAsistentes = await _context.Asistentes.CountAsync(a => a.Activo);
+        ViewBag.TotalInscripciones = await _context.Inscripciones.CountAsync(i => i.Activo);
+        ViewBag.TotalRecursos = await _context.Recursos.CountAsync(r => r.Activo);
 
         var ultimosEventos = await _context.Eventos
+            .Where(e => e.Activo)
             .OrderByDescending(e => e.EventoId) 
             .Take(3)
             .ToListAsync();

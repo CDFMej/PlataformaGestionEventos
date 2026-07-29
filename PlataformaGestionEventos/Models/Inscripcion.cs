@@ -18,8 +18,8 @@ public class Inscripcion
 
     [ForeignKey("EventoId")]
     public Evento? Evento { get; set; }
-
-
+    [Required]
+    public bool Activo { get; set; } = true;
     public int AsistenteId { get; set; }
 
     [ForeignKey("AsistenteId")]

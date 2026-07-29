@@ -25,8 +25,32 @@ public class EventoController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        var eventosExpirados = await _context.Eventos
+        .Include(e => e.RecursosEvento)
+        .Where(e => e.Activo && e.FechaFin <= DateTime.Now && e.RecursosEvento.Any())
+        .ToListAsync();
+
+        foreach (var evento in eventosExpirados)
+        {
+            foreach (var re in evento.RecursosEvento)
+            {
+                var recursoDb = await _context.Recursos.FindAsync(re.RecursoId);
+                if (recursoDb != null)
+                {
+                    recursoDb.cantidad += re.cantidad;
+                    recursoDb.Disponible = true;
+                }
+            }
+            _context.RecursoEvento.RemoveRange(evento.RecursosEvento);
+        }
+
+        if (eventosExpirados.Any())
+        {
+            await _context.SaveChangesAsync();
+        }
         var eventos = await _context.Eventos
             .Include(e => e.Sala)
+            .Where(a => a.Activo)
             .ToListAsync();
         return View(eventos);
     }
@@ -73,6 +97,7 @@ public class EventoController : Controller
                 }
 
                 bool conflicto = await _context.Eventos.AnyAsync(e =>
+                e.Activo &&
                 e.SalaId == evento.SalaId &&
                 evento.FechaInicio < e.FechaFin &&
                 evento.FechaFin > e.FechaInicio);
@@ -205,13 +230,23 @@ public async Task<IActionResult> Editar(int id, Evento evento)
         return NotFound();
     }
 
-    var sala = await _context.Salas.FindAsync(evento.SalaId);
+        var eventoActualDb = await _context.Eventos.AsNoTracking().FirstOrDefaultAsync(e => e.EventoId == id);
+        if (eventoActualDb == null) return NotFound();
+
+        if (DateTime.Now > eventoActualDb.FechaInicio)
+        {
+            ModelState.AddModelError("", "No se puede modificar un evento que ya ha Iniciado o Finalizado.");
+            return await RecargarVistaEditar(evento);
+        }
+
+        var sala = await _context.Salas.FindAsync(evento.SalaId);
     if (sala != null && evento.CapacidadMaxima > sala.capacidad)
     {
         ModelState.AddModelError("CapacidadMaxima", $"La capacidad excede el límite de la sala ({sala.capacidad}).");
     }
 
     bool conflicto = await _context.Eventos.AnyAsync(e =>
+    e.Activo &&
     e.EventoId != evento.EventoId &&
     e.SalaId == evento.SalaId &&
     evento.FechaInicio < e.FechaFin &&
@@ -271,7 +306,26 @@ public async Task<IActionResult> Editar(int id, Evento evento)
                 }
             }
         }
-        await _context.SaveChangesAsync();
+            if (eventoActualDb.FechaInicio != evento.FechaInicio || eventoActualDb.FechaFin != evento.FechaFin)
+            {
+                var inscritos = await _context.Inscripciones
+                    .Where(i => i.EventoId == evento.EventoId)
+                    .Include(i => i.Asistente)
+                    .ToListAsync();
+
+                foreach (var inscripcion in inscritos)
+                {
+                    if (!string.IsNullOrEmpty(inscripcion.Asistente?.UsuarioId))
+                    {
+                        _context.Notificaciones.Add(new Notificacion
+                        {
+                            UsuarioId = inscripcion.Asistente.UsuarioId,
+                            Mensaje = $"El evento '{evento.Nombre}' ha actualizado su horario. Nueva fecha de inicio: {evento.FechaInicio:dd/MM/yyyy HH:mm}"
+                        });
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
     
@@ -344,9 +398,32 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
     {
         var evento = await _context.Eventos
             .Include(e => e.RecursosEvento)
+            .Include(e => e.Inscripciones)
+            .ThenInclude(i => i.Asistente)
             .FirstOrDefaultAsync(e => e.EventoId == id);
         if (evento != null)
         {
+            if (DateTime.Now > evento.FechaInicio)
+            {
+                TempData["Error"] = "No se puede modificar o desactivar un evento que ya Inicio o Finalizo.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (evento.Inscripciones != null && evento.Inscripciones.Any())
+            {
+                foreach (var inscripcion in evento.Inscripciones)
+                {
+                    if (!string.IsNullOrEmpty(inscripcion.Asistente?.UsuarioId))
+                    {
+                        _context.Notificaciones.Add(new Notificacion
+                        {
+                            UsuarioId = inscripcion.Asistente.UsuarioId,
+                            Mensaje = $"Lamentamos informarte que el evento '{evento.Nombre}' ha sido cancelado."
+                        });
+                    }
+                }
+            }
+
             foreach (var re in evento.RecursosEvento)
             {
                 var recursoDb = await _context.Recursos
@@ -361,7 +438,8 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
                 }
             }
             _context.RecursoEvento.RemoveRange(evento.RecursosEvento);
-            _context.Eventos.Remove(evento);
+            evento.Activo = false;
+            _context.Eventos.Update(evento);
             await _context.SaveChangesAsync();
         }
         return RedirectToAction(nameof(Index));
@@ -397,7 +475,7 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
     {
         var eventos = await _context.Eventos
             .Include(e => e.Sala)
-            .Where(e => e.FechaInicio > DateTime.Now)
+            .Where(e => e.FechaInicio > DateTime.Now && e.Activo)
             .ToListAsync();
         return View(eventos);
     }
@@ -416,7 +494,7 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
         var asistente = await _context.Asistentes
             .FirstOrDefaultAsync(a => a.UsuarioId == userId);
 
-        if (asistente == null)
+        if (asistente == null )
         {
             TempData["Error"] = "No se encontró un perfil de asistente asociado a tu cuenta.";
             return RedirectToAction(nameof(Disponibles));
@@ -426,9 +504,16 @@ private async Task<IActionResult> RecargarVistaEditar(Evento evento)
             .Include(e => e.Inscripciones)
             .FirstOrDefaultAsync(e => e.EventoId == eventoId);
 
-        if (evento == null)
+        if (evento == null || !evento.Activo)
         {
-            return NotFound();
+            TempData["Error"] = "El evento no está disponible o ha sido desactivado.";
+            return RedirectToAction(nameof(Disponibles));
+        }
+
+        if (DateTime.Now > evento.FechaFin)
+        {
+            TempData["Error"] = "Este evento ya ha finalizado, no se permiten inscripciones.";
+            return RedirectToAction(nameof(Disponibles));
         }
 
         bool yaInscrito = await _context.Inscripciones

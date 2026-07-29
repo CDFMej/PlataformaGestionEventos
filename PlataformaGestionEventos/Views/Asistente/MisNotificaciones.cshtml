@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PlataformaGestionEventos.Models.Notificacion>
+@{
+    ViewData["Title"] = "Mis Notificaciones";
+}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); max-width: 800px; margin: 0 auto; }
+    .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
+    .custom-hr { border-top: 1px solid #2d2d3d; opacity: 1; margin: 1.5rem 0; }
+    .notification-card { background-color: #262633; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 16px; transition: all 0.2s ease; border-left: 4px solid #ff527b; }
+    .notification-card.leida { border-left-color: #4a4a5e; opacity: 0.8; }
+    .notification-icon { font-size: 1.5rem; color: #ff527b; margin-top: 2px; }
+    .notification-content { flex-grow: 1; }
+    .notification-message { color: #ffffff; font-size: 0.95rem; margin-bottom: 4px; }
+    .notification-date { color: #7e7e8f; font-size: 0.8rem; }
+</style>
+
+<div class="custom-dashboard">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="custom-title m-0"><i class="bi bi-bell"></i> Mis Notificaciones</h1>
+    </div>
+
+    <div class="custom-hr"></div>
+
+    @if (Model != null && Model.Any())
+{
+<div class="notifications-container">
+        @foreach (var noti in Model)
+        {
+            <div class="notification-card @(noti.Leida ? "leida" : "")">
+                <div class="notification-icon">
+                    <i class="bi bi-info-circle-fill"></i>
+                </div>
+                <div class="notification-content">
+                    <p class="notification-message">@noti.Mensaje</p>
+                    <span class="notification-date">@noti.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
+        }
+    </div>
+    }
+    else
+    {
+    <div class="text-center py-5">
+        <i class="bi bi-bell-slash text-muted" style="font-size: 3rem;"></i>
+        <p class="text-muted mt-3">No tienes notificaciones por el momento.</p>
+    </div>
+    }
+</div>

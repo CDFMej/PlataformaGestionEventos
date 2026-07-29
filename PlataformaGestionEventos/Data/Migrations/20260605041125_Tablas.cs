@@ -21,7 +21,8 @@ namespace PlataformaGestionEventos.Migrations
                     Identidad = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Correo = table.Column<string>(type: "TEXT", nullable: false),
                     Telefono = table.Column<string>(type: "TEXT", nullable: false),
-                    UsuarioId = table.Column<string>(type: "TEXT", nullable: false)
+                    UsuarioId = table.Column<string>(type: "TEXT", nullable: false),
+                    Activo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -45,7 +46,8 @@ namespace PlataformaGestionEventos.Migrations
                     FechaInicio = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CapacidadMaxima = table.Column<int>(type: "INTEGER", nullable: false),
-                    SalaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    SalaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Activo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -67,7 +69,8 @@ namespace PlataformaGestionEventos.Migrations
                     Nombre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Tipo = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Disponible = table.Column<bool>(type: "INTEGER", nullable: false),
-                    cantidad = table.Column<int>(type: "INTEGER", nullable: false)
+                    cantidad = table.Column<int>(type: "INTEGER", nullable: false),
+                    Activo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -83,7 +86,8 @@ namespace PlataformaGestionEventos.Migrations
                     FechaInscripcion = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Estado = table.Column<string>(type: "TEXT", nullable: false),
                     EventoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AsistenteId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AsistenteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Activo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {

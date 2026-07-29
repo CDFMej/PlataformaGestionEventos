@@ -23,6 +23,7 @@ public class InscripcionController : Controller
         var inscripciones = await _context.Inscripciones
             .Include(i => i.Evento)
             .Include(i => i.Asistente)
+            .Where(i => i.Activo)
             .ToListAsync();
         return View(inscripciones);
     }
@@ -130,9 +131,9 @@ public class InscripcionController : Controller
         var inscripcion = await _context.Inscripciones.FindAsync(id);
         if (inscripcion != null)
         {
-            _context.Inscripciones.Remove(inscripcion);
+            inscripcion.Activo = false;
+            _context.Inscripciones.Update(inscripcion);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
         return RedirectToAction(nameof(Index));
     }

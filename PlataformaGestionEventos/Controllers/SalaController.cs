@@ -20,7 +20,9 @@ public class SalaController: Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var salas = await _context.Salas.ToListAsync();
+        var salas = await _context.Salas
+            .Where(s => s.Activo)
+            .ToListAsync();
         return View(salas);
     }
 
@@ -112,9 +114,10 @@ public class SalaController: Controller
         var sala = await _context.Salas.FindAsync(id);
         if (sala != null)
         {
-            _context.Salas.Remove(sala);
+            sala.Activo = false;
+            _context.Salas.Update(sala);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["Mensaje"] = "La sala ha sido desactivada correctamente.";
         }
         return RedirectToAction(nameof(Index));
     }

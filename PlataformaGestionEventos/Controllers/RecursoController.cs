@@ -20,7 +20,9 @@ public class RecursoController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var recursos = await _context.Recursos.ToListAsync();
+        var recursos = await _context.Recursos
+            .Where(r => r.Activo)
+            .ToListAsync();
         return View(recursos);
     }
 
@@ -112,9 +114,9 @@ public class RecursoController : Controller
         var recurso = await _context.Recursos.FindAsync(id);
         if (recurso != null)
         {
-            _context.Recursos.Remove(recurso);
+            recurso.Activo = false;
+            _context.Recursos.Update(recurso);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
         return RedirectToAction(nameof(Index));
     }

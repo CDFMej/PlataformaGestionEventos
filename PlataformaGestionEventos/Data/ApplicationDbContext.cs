@@ -12,7 +12,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Inscripcion> Inscripciones { get; set; }
     public DbSet<Recurso> Recursos { get; set; }
     public DbSet<RecursoEvento> RecursoEvento { get; set; }
-    
+    public DbSet<Notificacion> Notificaciones { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

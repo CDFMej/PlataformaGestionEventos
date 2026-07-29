@@ -30,6 +30,8 @@ public class Asistente
 
     [Required]
     public string UsuarioId { get; set; } = string.Empty;
+    [Required]
+    public bool Activo { get; set; } = true;
 
     [ForeignKey("UsuarioId")]
     public IdentityUser? User { get; set; }

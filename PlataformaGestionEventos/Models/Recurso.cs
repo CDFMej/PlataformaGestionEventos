@@ -18,4 +18,6 @@ public class Recurso
     [Range(0, int.MaxValue, ErrorMessage = "La cantidad no puede ser negativa")]
     public int cantidad { get; set; }
     public ICollection<RecursoEvento>? RecursosEvento { get; set; }
+
+    public bool Activo { get; set; } = true;
 }

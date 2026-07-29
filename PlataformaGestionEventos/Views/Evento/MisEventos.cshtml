@@ -19,6 +19,7 @@
                     <th>Evento</th>
                     <th>Sala</th>
                     <th>Fecha de Inicio</th>
+                    <th>Fecha Fin</th>
                     <th>Fecha de Inscripción</th>
                 </tr>
             </thead>
@@ -27,10 +28,12 @@
                 {
                     <tr>
                         <td>@item.Evento?.Nombre</td>
-                        <td>@item.Evento?.Sala?.SalaId</td>
+                        <td>@item.Evento?.Sala?.nombre</td>
                         <td>@item.Evento?.FechaInicio.ToString("g")</td>
+                        <td>@item.Evento?.FechaFin.ToString("g")</td>
                         <td>@item.FechaInscripcion.ToString("g")</td>
                     </tr>
+
                 }
             </tbody>
         </table>

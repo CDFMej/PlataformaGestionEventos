@@ -18,7 +18,8 @@ namespace PlataformaGestionEventos.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     nombre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     capacidad = table.Column<int>(type: "INTEGER", nullable: false),
-                    ubicacion = table.Column<string>(type: "TEXT", nullable: false)
+                    ubicacion = table.Column<string>(type: "TEXT", nullable: false),
+                    Activo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {

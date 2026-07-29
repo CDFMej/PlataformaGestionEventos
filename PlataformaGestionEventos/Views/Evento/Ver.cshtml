@@ -1,7 +1,10 @@
 @model PlataformaGestionEventos.Models.Evento
 @{
     ViewData["Title"] = "Detalle del Evento";
+    bool yaFinalizo = DateTime.Now > Model.FechaFin;
 }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
     .custom-dashboard { font-family: 'Poppins', sans-serif; background-color: #21212b; color: #b5b5be; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); max-width: 700px; margin: 0 auto; }
     .custom-title { font-weight: 600; color: #ffffff; font-size: 1.75rem; }
@@ -17,9 +20,18 @@
     .btn-custom-edit:hover { background: linear-gradient(135deg, #ff715b, #ff527b); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 82, 123, 0.4); }
     .btn-custom-back { background: transparent; border: 1px solid #2d2d3d; color: #7e7e8f; padding: 12px 30px; border-radius: 20px; font-weight: 500; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
     .btn-custom-back:hover { border-color: #5c5c70; color: #ffffff; }
+    .badge-finalizado { background-color: #3b3b4f; color: #ff715b; padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ff715b; }
 </style>
+
 <div class="custom-dashboard">
-    <h1 class="custom-title m-0 text-center">Detalle del Evento</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="custom-title m-0">Detalle del Evento</h1>
+        @if (yaFinalizo)
+        {
+            <span class="badge-finalizado"><i class="bi bi-clock-history"></i> Evento Finalizado</span>
+        }
+    </div>
+    
     <div class="custom-hr"></div>
     <div class="row px-2">
         <div class="col-sm-3 custom-label">Nombre</div>
@@ -27,14 +39,15 @@
         <div class="col-sm-3 custom-label">Descripción</div>
         <div class="col-sm-9 custom-value">@Model.Descripcion</div>
         <div class="col-sm-3 custom-label">Fecha Inicio</div>
-        <div class="col-sm-9 custom-value">@Model.FechaInicio</div>
+        <div class="col-sm-9 custom-value">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</div>
         <div class="col-sm-3 custom-label">Fecha Fin</div>
-        <div class="col-sm-9 custom-value">@Model.FechaFin</div>
+        <div class="col-sm-9 custom-value">@Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</div>
         <div class="col-sm-3 custom-label">Capacidad Máxima</div>
         <div class="col-sm-9 custom-value">@Model.CapacidadMaxima</div>
         <div class="col-sm-3 custom-label">Sala</div>
         <div class="col-sm-9 custom-value">@Model.Sala?.nombre</div>
     </div>
+    
     <div class="custom-hr"></div>
     <h4 class="custom-subtitle mb-3">Recursos asignados</h4>
     @if (Model.RecursosEvento != null && Model.RecursosEvento.Any())
@@ -61,9 +74,14 @@
     {
         <p class="text-muted small px-2">No hay recursos asignados.</p>
     }
+    
     <div class="custom-hr"></div>
     <div class="d-flex justify-content-between align-items-center pt-2">
         <a asp-action="Index" class="btn-custom-back">Volver</a>
-        <a asp-action="Editar" asp-route-id="@Model.EventoId" class="btn-custom-edit">Editar</a>
+        
+        @if (!yaFinalizo)
+        {
+            <a asp-action="Editar" asp-route-id="@Model.EventoId" class="btn-custom-edit">Editar</a>
+        }
     </div>
 </div>

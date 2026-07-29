@@ -13,4 +13,6 @@ public class Sala
     public int capacidad { get; set; }
     [Required(ErrorMessage = "Ingrese la direccion de la sala")]
     public string ubicacion { get; set; }
+    [Required]
+    public bool Activo { get; set; } = true;
 }

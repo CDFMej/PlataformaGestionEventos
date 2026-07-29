@@ -26,6 +26,8 @@ public class Evento
     public int SalaId { get; set; }
     [ForeignKey("SalaId")]
     public Sala? Sala { get; set; }
+    [Required]
+    public bool Activo { get; set; } = true;
     public ICollection<Inscripcion>? Inscripciones { get; set; }
     public ICollection<RecursoEvento>? RecursosEvento { get; set; }
     [NotMapped]

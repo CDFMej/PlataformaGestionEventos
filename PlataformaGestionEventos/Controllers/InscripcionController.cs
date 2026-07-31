@@ -29,9 +29,13 @@ public class InscripcionController : Controller
     }
 
     [HttpGet]
-    public IActionResult Crear()
+    public async Task<IActionResult> Crear()
     {
-        ViewBag.EventoId = new SelectList(_context.Eventos, "EventoId", "Nombre");
+        var eventosDisponibles = await _context.Eventos
+        .Where(e => e.Activo && e.FechaInicio > DateTime.Now)
+        .ToListAsync();
+
+        ViewBag.EventoId = new SelectList(eventosDisponibles, "EventoId", "Nombre");
         ViewBag.AsistenteId = new SelectList(_context.Asistentes, "AsistenteId", "Nombre");
         return View();
     }
@@ -40,13 +44,24 @@ public class InscripcionController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Crear(Inscripcion inscripcion)
     {
+        var eventoSeleccionado = await _context.Eventos.FindAsync(inscripcion.EventoId);
+        if (eventoSeleccionado == null || !eventoSeleccionado.Activo || eventoSeleccionado.FechaInicio <= DateTime.Now)
+        {
+            ModelState.AddModelError("", "No puedes inscribirte a un evento que ya ha comenzado o finalizado.");
+        }
+
         if (ModelState.IsValid)
         {
             _context.Add(inscripcion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.EventoId = new SelectList(_context.Eventos, "EventoId", "Nombre", inscripcion.EventoId);
+
+        var eventosDisponibles = await _context.Eventos
+            .Where(e => e.Activo && e.FechaInicio > DateTime.Now)
+            .ToListAsync();
+
+        ViewBag.EventoId = new SelectList(eventosDisponibles, "EventoId", "Nombre", inscripcion.EventoId);
         ViewBag.AsistenteId = new SelectList(_context.Asistentes, "AsistenteId", "Nombre", inscripcion.AsistenteId);
         return View(inscripcion);
     }

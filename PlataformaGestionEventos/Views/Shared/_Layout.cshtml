@@ -86,9 +86,6 @@
 					@if (User.Identity is { IsAuthenticated: true } && User.IsInRole("Asistente"))
 					{
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Evento" asp-action="Disponibles">Disponibles</a>
-					</li>
-					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Evento" asp-action="MisEventos">Mis Eventos</a>
 					</li>
                     <li class="nav-item">

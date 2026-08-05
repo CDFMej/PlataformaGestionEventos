@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PlataformaGestionEventos.Controllers;
 
-[Authorize(Roles = "Administrador, Operador, Asistente")]
+[Authorize(Roles = "Administrador, Operador")]
 public class AsistenteController : Controller
 {
     private readonly ApplicationDbContext _context;

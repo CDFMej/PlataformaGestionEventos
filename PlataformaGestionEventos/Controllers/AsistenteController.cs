@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PlataformaGestionEventos.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Administrador, Operador")]
 public class AsistenteController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -20,7 +20,6 @@ public class AsistenteController : Controller
 
     //Metodo Get
     [HttpGet]
-    [Authorize(Roles = "Administrador, Operador")]
     public async Task<IActionResult> Index()
     {
         var asistentes = await _context.Asistentes
@@ -30,14 +29,12 @@ public class AsistenteController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrador, Operador")]
     public IActionResult Crear()
     {
         return View();
     }
 
     [HttpPost]
-    [Authorize(Roles = "Administrador, Operador")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Crear(Asistente asistente)
     {
@@ -51,7 +48,6 @@ public class AsistenteController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrador, Operador")]
     public async Task<IActionResult> Editar(int? id)
     {
         if (id == null)
@@ -67,7 +63,6 @@ public class AsistenteController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = "Administrador, Operador")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Editar(int id, Asistente asistente)
     {
@@ -85,7 +80,6 @@ public class AsistenteController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrador, Operador")]
     public async Task<IActionResult> Ver(int? id)
     {
         if (id == null)
@@ -104,7 +98,6 @@ public class AsistenteController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrador, Operador")]
     public async Task<IActionResult> Eliminar(int? id)
     {
         if (id == null)
@@ -120,7 +113,6 @@ public class AsistenteController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = "Administrador, Operador")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Eliminar(int id)
     {
